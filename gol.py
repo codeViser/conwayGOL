@@ -45,11 +45,17 @@ def game_of_life(*args):
 	global X
 	with tf.Session() as session:
 		Y = session.run(board_update, feed_dict={board: X})[0]
+		Z = session.run(board_update, feed_dict={board: Y})[0]
+		if np.array_equal(X,Z):
+			initial_board_values = session.run(initial_board)
+			X = session.run(board_update, feed_dict={board: initial_board_values})[0]
+			Y=X
+
 		X=Y
 		plot.set_array(Y)
 	return plot,
 
 
 
-ani = animation.FuncAnimation(fig, game_of_life, interval=200, blit=True)
+ani = animation.FuncAnimation(fig, game_of_life, interval=1, blit=True)
 plt.show()
